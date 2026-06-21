@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>批量新增用户 - 禅道管理</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/assets/css/app.css" rel="stylesheet">
+  <script>
+    window.PAGE_SUBTITLE = '粘贴多行用户信息，识别后批量创建禅道账号，成功后将存入待获取列表。';
+  </script>
+</head>
+<body>
+  <div class="app-shell d-flex">
+    <aside id="sidebar" class="sidebar"></aside>
+
+    <div class="main-content">
+      <header class="page-header px-4 py-3">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div>
+            <h1 id="pageTitle" class="h4 mb-1">批量新增用户</h1>
+            <p id="pageSubtitle" class="text-muted mb-0 small"></p>
+          </div>
+          <span class="badge text-bg-primary">用户管理 / 批量新增</span>
+        </div>
+      </header>
+
+      <main class="container-fluid p-4">
+        <div class="row justify-content-center">
+          <div class="col-xl-10 col-lg-11">
+            <div class="card content-card mb-4">
+              <div class="card-body p-4">
+                <label for="rawInput" class="form-label fw-semibold">用户信息输入</label>
+                <textarea id="rawInput" class="form-control font-monospace" rows="8"
+                  placeholder="每行一个用户，可用逗号或空格分隔，也可只填部分字段&#10;例如：&#10;张三,前端工程师,男&#10;李四 测试工程师&#10;王五 女&#10;赵六"></textarea>
+                <div class="form-text mt-2">
+                  支持逗号、中文逗号、制表符或空格分隔；每行可只填姓名、岗位或性别中的一项或多项，识别后可在下方补全。
+                </div>
+                <button id="parseBtn" type="button" class="btn btn-outline-primary mt-3">
+                  <i class="bi bi-magic me-1"></i>识别
+                </button>
+              </div>
+            </div>
+
+            <div id="formSection" class="card content-card d-none">
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <h2 class="h6 mb-0">识别结果（可修改后提交）</h2>
+                  <span id="rowCount" class="badge text-bg-secondary"></span>
+                </div>
+
+                <div id="userRows" class="d-flex flex-column gap-3"></div>
+
+                <div class="mt-4">
+                  <button id="submitBtn" type="button" class="btn btn-primary px-4">
+                    <i class="bi bi-people-fill me-1"></i>批量创建
+                  </button>
+                </div>
+
+                <div id="status" class="alert mt-4 d-none" role="alert"></div>
+                <div id="resultSection" class="d-none mt-4"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/models/positions.js"></script>
+  <script src="/assets/js/layout.js"></script>
+  <script src="/assets/js/users/batch-create.js"></script>
+  <script>
+    initLayout({ section: 'users', page: 'batch-create', title: '批量新增用户' });
+  </script>
+</body>
+</html>

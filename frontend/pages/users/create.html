@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新增用户 - 禅道管理</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/assets/css/app.css" rel="stylesheet">
+  <script>
+    window.PAGE_SUBTITLE = '填写姓名、岗位、性别，系统将自动创建禅道账号并返回登录信息。';
+  </script>
+</head>
+<body>
+  <div class="app-shell d-flex">
+    <aside id="sidebar" class="sidebar"></aside>
+
+    <div class="main-content">
+      <header class="page-header px-4 py-3">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div>
+            <h1 id="pageTitle" class="h4 mb-1">新增用户</h1>
+            <p id="pageSubtitle" class="text-muted mb-0 small"></p>
+          </div>
+          <span class="badge text-bg-primary">用户管理 / 新增</span>
+        </div>
+      </header>
+
+      <main class="container-fluid p-4">
+        <div class="row justify-content-center">
+          <div class="col-xl-8 col-lg-10">
+            <div class="card content-card">
+              <div class="card-body p-4">
+                <form id="registerForm" novalidate>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label for="name" class="form-label">姓名</label>
+                      <input id="name" name="name" type="text" class="form-control" placeholder="例如：张三" required autocomplete="name">
+                    </div>
+
+                    <div class="col-md-6">
+                      <label for="gender" class="form-label">性别</label>
+                      <select id="gender" name="gender" class="form-select" required>
+                        <option value="男" selected>男</option>
+                        <option value="女">女</option>
+                      </select>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="position" class="form-label">岗位</label>
+                      <select id="position" name="position" class="form-select" required>
+                        <option value="">请选择岗位</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="alert alert-light border mt-4 mb-4">
+                    <div class="fw-semibold mb-2">自动补全规则</div>
+                    <ul class="mb-0 small text-muted">
+                      <li>部门：应用开发部</li>
+                      <li>用户名：姓名全拼</li>
+                      <li>职位 / 权限分组：按岗位自动映射</li>
+                      <li>密码：系统随机生成（12 位复杂密码）</li>
+                    </ul>
+                  </div>
+
+                  <button id="submitBtn" type="submit" class="btn btn-primary px-4">
+                    <i class="bi bi-person-plus me-1"></i>创建禅道账号
+                  </button>
+                </form>
+
+                <div id="status" class="alert mt-4 d-none" role="alert"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-success-subtle">
+          <h5 class="modal-title text-success-emphasis" id="resultModalLabel">
+            <i class="bi bi-check-circle me-1"></i>账号创建成功
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+        </div>
+        <div class="modal-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-3">网址</dt>
+            <dd class="col-sm-9"><a id="resultUrl" href="#" target="_blank" rel="noopener noreferrer"></a></dd>
+
+            <dt class="col-sm-3">账号</dt>
+            <dd class="col-sm-9"><code id="resultAccount"></code></dd>
+
+            <dt class="col-sm-3">密码</dt>
+            <dd class="col-sm-9"><code id="resultPassword"></code></dd>
+
+            <dt class="col-sm-3">姓名</dt>
+            <dd class="col-sm-9" id="resultName"></dd>
+
+            <dt class="col-sm-3">岗位</dt>
+            <dd class="col-sm-9" id="resultPosition"></dd>
+
+            <dt class="col-sm-3">部门</dt>
+            <dd class="col-sm-9" id="resultDept"></dd>
+          </dl>
+          <div class="alert alert-warning mt-3 mb-0 small">
+            请妥善保存以上信息，并首次登录后立即修改密码。
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="copyAllBtn" class="btn btn-primary">
+            <i class="bi bi-clipboard me-1"></i>复制全部信息
+          </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/models/positions.js"></script>
+  <script src="/assets/js/layout.js"></script>
+  <script src="/assets/js/users/create.js"></script>
+  <script>
+    initLayout({ section: 'users', page: 'create', title: '新增用户' });
+  </script>
+</body>
+</html>

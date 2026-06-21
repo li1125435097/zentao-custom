@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Token 管理 - 禅道管理</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/assets/css/app.css" rel="stylesheet">
+  <script>
+    window.PAGE_SUBTITLE = '管理 API 访问 Token，按姓名生成唯一标识。';
+  </script>
+</head>
+<body>
+  <div class="app-shell d-flex">
+    <aside id="sidebar" class="sidebar"></aside>
+
+    <div class="main-content">
+      <header class="page-header px-4 py-3">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div>
+            <h1 id="pageTitle" class="h4 mb-1">Token 管理</h1>
+            <p id="pageSubtitle" class="text-muted mb-0 small"></p>
+          </div>
+          <span class="badge text-bg-secondary">权限管理 / Token 管理</span>
+        </div>
+      </header>
+
+      <main class="container-fluid p-4">
+        <div class="card content-card">
+          <div class="card-body p-4">
+            <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+              <button id="addTokenBtn" type="button" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-lg me-1"></i>添加 Token
+              </button>
+
+              <button id="refreshBtn" type="button" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-clockwise me-1"></i>刷新
+              </button>
+
+              <small id="summaryInfo" class="text-muted ms-auto"></small>
+            </div>
+
+            <div id="status" class="alert d-none" role="alert"></div>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col">Token</th>
+                    <th scope="col">状态</th>
+                    <th scope="col">复制地址</th>
+                  </tr>
+                </thead>
+                <tbody id="tokenTableBody">
+                  <tr>
+                    <td colspan="3" class="text-center text-muted py-4">加载中...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addTokenModal" tabindex="-1" aria-labelledby="addTokenModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addTokenModalLabel">添加 Token</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+        </div>
+        <form id="addTokenForm" novalidate>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="realname" class="form-label">姓名</label>
+              <input id="realname" name="realname" type="text" class="form-control" placeholder="例如：张三" required autocomplete="name">
+              <div class="form-text">系统将按「姓名全拼_20位随机字母数字」生成 Token。</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+            <button id="submitTokenBtn" type="submit" class="btn btn-primary">
+              <i class="bi bi-plus-lg me-1"></i>生成 Token
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/layout.js"></script>
+  <script src="/assets/js/permissions/token-list.js"></script>
+  <script>
+    initLayout({ section: 'permissions', page: 'token-list', title: 'Token 管理' });
+  </script>
+</body>
+</html>
