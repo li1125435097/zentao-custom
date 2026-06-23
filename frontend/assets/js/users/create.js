@@ -61,17 +61,53 @@ function showResult(data) {
   resultModal.show();
 }
 
-async function copyText(text, button, defaultLabel) {
+function copyWithExecCommand(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.setAttribute('readonly', '');
+  textarea.style.position = 'fixed';
+  textarea.style.left = '-9999px';
+  textarea.style.top = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  textarea.setSelectionRange(0, text.length);
+  let ok = false;
   try {
-    await navigator.clipboard.writeText(text);
+    ok = document.execCommand('copy');
+  } finally {
+    document.body.removeChild(textarea);
+  }
+  return ok;
+}
+
+async function copyText(text, button, defaultLabel) {
+  const markCopied = () => {
     button.innerHTML = '<i class="bi bi-check-lg me-1"></i>已复制';
     setTimeout(() => {
       button.innerHTML = defaultLabel;
     }, 3000);
+  };
+
+  try {
+    if (navigator.clipboard?.writeText && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      markCopied();
+      return;
+    }
   } catch(err) {
     console.error(err);
-    setStatus('复制失败，请手动复制。');
+    // fall through to legacy copy
   }
+
+  if (copyWithExecCommand(text)) {
+    markCopied();
+    return;
+  }
+
+  button.innerHTML = '<i class="bi bi-x-lg me-1"></i>复制失败';
+  setTimeout(() => {
+    button.innerHTML = defaultLabel;
+  }, 3000);
 }
 
 form.addEventListener('submit', async (event) => {
