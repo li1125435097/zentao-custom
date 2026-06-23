@@ -61,87 +61,6 @@ function showResult(data) {
   resultModal.show();
 }
 
-function copyWithExecCommand(text) {
-  const container = resultModalEl.querySelector('.modal-content') || document.body;
-  const textarea = document.createElement('textarea');
-  textarea.value = text;
-  textarea.setAttribute('aria-hidden', 'true');
-  textarea.style.cssText = [
-    'position:fixed',
-    'top:0',
-    'left:0',
-    'width:2em',
-    'height:2em',
-    'padding:0',
-    'border:none',
-    'outline:none',
-    'box-shadow:none',
-    'background:transparent',
-    'opacity:0',
-  ].join(';');
-
-  container.appendChild(textarea);
-  textarea.focus({ preventScroll: true });
-  textarea.select();
-  textarea.setSelectionRange(0, text.length);
-
-  let copied = false;
-  const onCopy = (event) => {
-    event.clipboardData.setData('text/plain', text);
-    event.preventDefault();
-    copied = true;
-  };
-
-  document.addEventListener('copy', onCopy);
-  try {
-    document.execCommand('copy');
-  } catch {
-    copied = false;
-  } finally {
-    document.removeEventListener('copy', onCopy);
-    container.removeChild(textarea);
-  }
-
-  return copied;
-}
-
-async function copyText(text, button, defaultLabel) {
-  if (!text) {
-    button.innerHTML = '<i class="bi bi-x-lg me-1"></i>复制失败';
-    setTimeout(() => {
-      button.innerHTML = defaultLabel;
-    }, 3000);
-    return;
-  }
-
-  const markCopied = () => {
-    button.innerHTML = '<i class="bi bi-check-lg me-1"></i>已复制';
-    setTimeout(() => {
-      button.innerHTML = defaultLabel;
-    }, 3000);
-  };
-
-  try {
-    if (navigator.clipboard?.writeText && window.isSecureContext) {
-      await navigator.clipboard.writeText(text);
-      markCopied();
-      return;
-    }
-  } catch {
-    // fall through to legacy copy
-  }
-
-  if (copyWithExecCommand(text)) {
-    markCopied();
-    return;
-  }
-
-  button.innerHTML = '<i class="bi bi-x-lg me-1"></i>复制失败';
-  setTimeout(() => {
-    button.innerHTML = defaultLabel;
-  }, 3000);
-}
-
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
   clearStatus();
@@ -193,10 +112,11 @@ form.addEventListener('submit', async (event) => {
 
 copyAllBtn.addEventListener('click', () => {
   if (!latestResult) return;
-  copyText(
+  ClipboardUtil.copyText(
     formatAllAccountInfo(latestResult),
     copyAllBtn,
     '<i class="bi bi-clipboard me-1"></i>复制全部信息',
+    resultModalEl.querySelector('.modal-content'),
   );
 });
 

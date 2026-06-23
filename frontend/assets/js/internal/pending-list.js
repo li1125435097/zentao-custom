@@ -218,18 +218,6 @@ function showProcessResult(data) {
   resultModal.show();
 }
 
-async function copyText(text, button, defaultLabel) {
-  try {
-    await navigator.clipboard.writeText(text);
-    button.innerHTML = '<i class="bi bi-check-lg me-1"></i>已复制';
-    setTimeout(() => {
-      button.innerHTML = defaultLabel;
-    }, 1500);
-  } catch {
-    setStatus('复制失败，请手动复制。');
-  }
-}
-
 async function processReApply(user) {
   confirmProcessBtn.disabled = true;
   confirmProcessBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>处理中...';
@@ -346,10 +334,11 @@ confirmProcessModalEl.addEventListener('hidden.bs.modal', () => {
 
 copyPasswordBtn.addEventListener('click', () => {
   if (!latestPassword) return;
-  copyText(
+  ClipboardUtil.copyText(
     latestPassword,
     copyPasswordBtn,
     '<i class="bi bi-clipboard me-1"></i>复制密码',
+    resultModalEl.querySelector('.modal-content'),
   );
 });
 

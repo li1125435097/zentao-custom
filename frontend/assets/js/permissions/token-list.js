@@ -64,16 +64,11 @@ async function copyLoginUrl(button) {
   }
 
   const defaultHtml = button.innerHTML;
-
-  try {
-    await navigator.clipboard.writeText(loginUrl);
-    button.innerHTML = '<i class="bi bi-check-lg"></i>';
-    setTimeout(() => {
-      button.innerHTML = defaultHtml;
-    }, 1500);
-  } catch {
-    setStatus('复制失败，请手动复制。');
-  }
+  await ClipboardUtil.copyText(loginUrl, button, defaultHtml, document.body, {
+    copiedLabel: '<i class="bi bi-check-lg"></i>',
+    failedLabel: '<i class="bi bi-x-lg"></i>',
+    resetMs: 1500,
+  });
 }
 
 function renderStatusSwitch(item) {

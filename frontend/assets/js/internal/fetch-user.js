@@ -103,18 +103,14 @@ fetchForm.addEventListener('submit', async (event) => {
   }
 });
 
-copyAllBtn.addEventListener('click', async () => {
+copyAllBtn.addEventListener('click', () => {
   if (!latestResult) return;
-
-  try {
-    await navigator.clipboard.writeText(formatAllAccountInfo(latestResult));
-    copyAllBtn.innerHTML = '<i class="bi bi-check-lg me-1"></i>已复制';
-    setTimeout(() => {
-      copyAllBtn.innerHTML = '<i class="bi bi-clipboard me-1"></i>复制全部信息';
-    }, 1500);
-  } catch {
-    setStatus('复制失败，请手动复制。');
-  }
+  ClipboardUtil.copyText(
+    formatAllAccountInfo(latestResult),
+    copyAllBtn,
+    '<i class="bi bi-clipboard me-1"></i>复制全部信息',
+    resultBox,
+  );
 });
 
 reApplyBtn.addEventListener('click', async () => {
