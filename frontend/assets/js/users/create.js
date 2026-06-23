@@ -67,8 +67,9 @@ async function copyText(text, button, defaultLabel) {
     button.innerHTML = '<i class="bi bi-check-lg me-1"></i>已复制';
     setTimeout(() => {
       button.innerHTML = defaultLabel;
-    }, 1500);
-  } catch {
+    }, 3000);
+  } catch(err) {
+    console.error(err);
     setStatus('复制失败，请手动复制。');
   }
 }
