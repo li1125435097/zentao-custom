@@ -62,25 +62,58 @@ function showResult(data) {
 }
 
 function copyWithExecCommand(text) {
+  const container = resultModalEl.querySelector('.modal-content') || document.body;
   const textarea = document.createElement('textarea');
   textarea.value = text;
-  textarea.setAttribute('readonly', '');
-  textarea.style.position = 'fixed';
-  textarea.style.left = '-9999px';
-  textarea.style.top = '0';
-  document.body.appendChild(textarea);
+  textarea.setAttribute('aria-hidden', 'true');
+  textarea.style.cssText = [
+    'position:fixed',
+    'top:0',
+    'left:0',
+    'width:2em',
+    'height:2em',
+    'padding:0',
+    'border:none',
+    'outline:none',
+    'box-shadow:none',
+    'background:transparent',
+    'opacity:0',
+  ].join(';');
+
+  container.appendChild(textarea);
+  textarea.focus({ preventScroll: true });
   textarea.select();
   textarea.setSelectionRange(0, text.length);
-  let ok = false;
+
+  let copied = false;
+  const onCopy = (event) => {
+    event.clipboardData.setData('text/plain', text);
+    event.preventDefault();
+    copied = true;
+  };
+
+  document.addEventListener('copy', onCopy);
   try {
-    ok = document.execCommand('copy');
+    document.execCommand('copy');
+  } catch {
+    copied = false;
   } finally {
-    document.body.removeChild(textarea);
+    document.removeEventListener('copy', onCopy);
+    container.removeChild(textarea);
   }
-  return ok;
+
+  return copied;
 }
 
 async function copyText(text, button, defaultLabel) {
+  if (!text) {
+    button.innerHTML = '<i class="bi bi-x-lg me-1"></i>复制失败';
+    setTimeout(() => {
+      button.innerHTML = defaultLabel;
+    }, 3000);
+    return;
+  }
+
   const markCopied = () => {
     button.innerHTML = '<i class="bi bi-check-lg me-1"></i>已复制';
     setTimeout(() => {
@@ -94,8 +127,7 @@ async function copyText(text, button, defaultLabel) {
       markCopied();
       return;
     }
-  } catch(err) {
-    console.error(err);
+  } catch {
     // fall through to legacy copy
   }
 
