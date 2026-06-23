@@ -72,3 +72,7 @@ http://localhost:3000/pages/users/create.html
 
 - 创建用户时 v1 API 的 `group` 传字符串，创建后通过 v2 API 写入权限组数组
 - 参考 Python 版 skill 见 `zentao-users/` 目录
+
+## 访问地址
+http://localhost:3000/api/login?token=lijinke_QniLQ2OYNB2X000vnuOR
+http://localhost:3000/api/login?token=lisi_OHq4CfMn5wrpSQp2CCg5
