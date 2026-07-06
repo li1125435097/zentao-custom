@@ -12,7 +12,6 @@ const POSITION_MAP = {
   研发总监: ['td', 6],
   高级开发: ['dev', 2],
   高级研发: ['dev', 2],
-  工程师: ['dev', 2],
   前端: ['dev', 2],
   后端: ['dev', 2],
   全栈: ['dev', 2],
@@ -67,14 +66,20 @@ function mapPosition(position) {
   }
 
   const posLower = String(position).trim().toLowerCase();
+  let bestMatch = null;
+  let bestLength = 0;
+
   for (const [keyword, [role, groupId]] of Object.entries(POSITION_MAP)) {
     const keyLower = keyword.toLowerCase();
-    if (posLower.includes(keyLower) || keyLower.includes(posLower)) {
-      return { role, groupId };
+    if (posLower.includes(keyLower)) {
+      if (keyword.length > bestLength) {
+        bestLength = keyword.length;
+        bestMatch = { role, groupId };
+      }
     }
   }
 
-  return { role: 'dev', groupId: 2 };
+  return bestMatch || { role: 'dev', groupId: 2 };
 }
 
 module.exports = { POSITION_MAP, POSITION_OPTIONS, mapPosition };
